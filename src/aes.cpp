@@ -1,9 +1,14 @@
 #include "aes.h"
+#include "keySchedule.h"
+#include "util.h"
 
-unsigned char* AES::encrypt(unsigned char plaintext[], unsigned char cipherKey[]) {
-    return plaintext;
+byte* AES::encrypt(byte plaintext[], byte cipherKey[]) {
+    keySchedule ks(cipherKey);
+    // So far just derive the keys
+    byte*** k = ks.generateKeySchedule(ROUNDS+1);
+    return cipherKey;
 }
 
-unsigned char* AES::encryptBlock(unsigned char block[16], unsigned char cipherKey[16]) {
+byte** AES::encryptBlock(byte block[16], byte cipherKey[16]) {
     return 0;
 }

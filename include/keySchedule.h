@@ -1,12 +1,16 @@
 #pragma once
+#include "aes.h"
 
 class keySchedule
 {
-private:
-    unsigned char** m_key;
 public:
-    keySchedule(unsigned char key[]);
+    keySchedule(byte key[]);
     ~keySchedule();
 
-    unsigned char* popKey();
+    byte*** generateKeySchedule(int numKeys);
+    byte* g(byte* in, int round);
+
+private:
+    byte** m_key;
+    byte*** m_keySchedule;
 };

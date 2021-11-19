@@ -1,12 +1,20 @@
 #pragma once
+#define CIPHERKEYSIZE 128
+#define BLOCKSIZE CIPHERKEYSIZE/8
+#define ROUNDS 11
+#define Nc 4
 
-#include "keySchedule.h"
+typedef unsigned char byte;
+
+#include <cstring>
+#include <stdio.h>
+#include <stdlib.h>
 
 class AES {
 public:
-    unsigned char state[16];
-    unsigned char* encrypt(unsigned char plaintext[], unsigned char cipherKey[]);
+    byte** state;
+    byte* encrypt(byte plaintext[], byte cipherKey[]);
 
 private:
-    unsigned char* encryptBlock(unsigned char block[16], unsigned char cipherKey[16]);
+    byte** encryptBlock(byte block[BLOCKSIZE], byte cipherKey[BLOCKSIZE]);
 };
