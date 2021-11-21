@@ -7,7 +7,7 @@ public:
     keySchedule(byte key[]);
     ~keySchedule();
 
-    byte*** generateKeySchedule(int numKeys);
+    byte*** generateKeySchedule();
     byte* g(byte* in, int round);
 
 private:

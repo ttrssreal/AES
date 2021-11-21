@@ -5,7 +5,8 @@
 #include "util.h"
 #include "keySchedule.h"
 
-int test1();
+int testKeyGen();
+int testAesEcbEncryption();
 
 class Test {
 public:

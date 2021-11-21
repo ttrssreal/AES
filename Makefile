@@ -1,6 +1,6 @@
 target = bin/aes
 
-LDFLAGS = -Wall -Iinclude/
+LDFLAGS = -Wall -Iinclude/ -g
 CC = g++
 
 src =\
@@ -14,7 +14,8 @@ $(target): $(addprefix src/, $(src))
 
 tests =\
 	test.cpp\
-	test_keySchedule.cpp
+	test_keySchedule.cpp\
+	test_aes.cpp
 
-tests: $(filter-out src/main.cpp src/aes.cpp, $(addprefix src/, $(src))) $(addprefix test/, $(tests))
+tests: $(filter-out src/main.cpp, $(addprefix src/, $(src))) $(addprefix test/, $(tests))
 	$(CC) -o bin/tests $^ $(LDFLAGS)

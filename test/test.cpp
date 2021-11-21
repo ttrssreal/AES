@@ -5,12 +5,13 @@
 #include <ostream>
 
 // add name of function to list and add declaration to test.h
-std::vector<int (*)()> all_test_funcs{ test1 };
+std::vector<int (*)()> all_test_funcs{ testKeyGen, testAesEcbEncryption };
 
 int Test::run() {
     return m_test_func();
 }
 
+// pass the test function
 Test::Test(int (*func)()) {
     m_test_func = func;
 }
@@ -26,6 +27,7 @@ Tests::Tests(std::vector<int (*)()> test_funcs) {
 void Tests::run() {
     for (size_t i = 0; i < m_tests.size(); i++)
     {
+        // run each test and show return value
         if (m_tests.at(i).run()) {
             std::cout << "\033[1;31m Failed\033[0m" << std::endl;
         } else {
@@ -37,6 +39,7 @@ void Tests::run() {
 
 int main() {
     Tests tests(all_test_funcs);
+    // run all tests
     tests.run();
     return 0;
 }

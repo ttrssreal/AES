@@ -3,15 +3,16 @@
 #include "util.h"
 
 keySchedule::keySchedule(byte key[]) {
-    m_key = batb(key, 4);
+    m_key = batb(key);
 }
 
 keySchedule::~keySchedule() {
-    deAllocateKeySchedule(m_keySchedule, 10);
+    deAllocateBlockArray(m_keySchedule, ROUNDS);
 }
 
 /* g encapsulates some of the logic detailed in page 19 of 
-https://csrc.nist.gov/csrc/media/publications/fips/197/final/documents/fips-197.pdf */
+https://csrc.nist.gov/csrc/media/publications/fips/197/final/documents/fips-197.pdf
+*/
 byte* keySchedule::g(byte* in, int round) {
     byte* result = new byte[4];
     // copy the word
@@ -19,27 +20,27 @@ byte* keySchedule::g(byte* in, int round) {
     {
         result[i] = in[i];
     }
-    rotWord(result);
-    subBytes(result);
+    rotWord(result, 1);
+    subBytesWord(result);
     doRcon(result, round);
     return result;
 }
 
-byte*** keySchedule::generateKeySchedule(int numKeys) {
-    m_keySchedule = allocateKeySchedule(numKeys);
+byte*** keySchedule::generateKeySchedule() {
+    m_keySchedule = allocateBlockArray(ROUNDS+1);
     // the first round key is always the original key
     m_keySchedule[0] = m_key;
     // for each key we need to generate
-    for (int i = 1; i <= 10; i++)
+    for (int i = 1; i <= ROUNDS; i++)
     {
-        byte* gOfPrevLast = g(m_keySchedule[i-1][3], i);
+        byte* gOfPrevLast = g(m_keySchedule[i-1][Nk-1], i);
         // set the initial word of the new key
         m_keySchedule[i][0] = xorWords(gOfPrevLast, m_keySchedule[i-1][0]);
 
         // used temporarily
         byte* prevWord = new byte[4];
         // j starts at 1 becaue above we have already set the first value
-        for (int j = 1; j < 4; j++)
+        for (int j = 1; j < Nk; j++)
         {
             // copy the word of the previous at the same position
             /*
